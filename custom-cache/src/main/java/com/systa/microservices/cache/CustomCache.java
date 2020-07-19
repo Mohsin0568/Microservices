@@ -18,6 +18,7 @@ public class CustomCache {
 				try{
 					while(true){
 						log.info("Clearing Cache");
+						log.debug("Debug - Clearing Cache");
 						CustomCache.cache.values().forEach(i -> {
 							if(i.isExpired()){
 								CustomCache.cache.remove(i.getKey());

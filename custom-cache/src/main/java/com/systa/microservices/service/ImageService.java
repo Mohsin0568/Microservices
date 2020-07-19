@@ -10,7 +10,10 @@ import com.systa.microservices.cache.CacheEntry;
 import com.systa.microservices.cache.Cacheable;
 import com.systa.microservices.cache.CustomCache;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class ImageService {
 	
 	private static final String BANNER_IMAGE_CACHE_KEY = "bannerImages";
@@ -46,9 +49,12 @@ public class ImageService {
 	@SuppressWarnings("unchecked")
 	public List<String> getImages(){
 		Cacheable<String, List<String>> cache = CustomCache.get(BANNER_IMAGE_CACHE_KEY);
-		if(cache != null)
+		if(cache != null){
+			log.debug("Data availabe in cache");
 			return cache.getValue();
+		}
 		
+		log.info("Data not available in cache");
 		return new ArrayList<>();
 	}
 }
