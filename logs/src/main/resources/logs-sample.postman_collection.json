@@ -1,0 +1,84 @@
+{
+	"variables": [],
+	"info": {
+		"name": "logs-sample",
+		"_postman_id": "411e114d-3a3f-2716-3a64-7effc961122f",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "createUser",
+			"request": {
+				"url": "http://localhost:8082/logs-demo/api/v1/user",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"userName\":\"waahKyaUserNameHain\",\n\t\"password\":\"waahKyaPasswordHain\",\n\t\"email\":\"waahKyaEmailHain@merebaapkicompany.com\",\n\t\"mobileNumber\":\"983934349\",\n\t\"city\":\"merebaapkaCity\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "getAllUsers",
+			"request": {
+				"url": "http://localhost:8082/logs-demo/api/v1/users",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "getUserById",
+			"request": {
+				"url": "http://localhost:8082/logs-demo/api/v1/user/1",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "updateUser",
+			"request": {
+				"url": "http://localhost:8082/logs-demo/api/v1/user/1",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"userName\":\"waahKyaUserNameHain\",\n\t\"password\":\"waahKyaPasswordHain\",\n\t\"email\":\"waahKyaEmailHain@merebaapkicompany.com\",\n\t\"mobileNumber\":\"don'tknow\",\n\t\"city\":\"merebaapkaCity\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "deleteUser",
+			"request": {
+				"url": "http://localhost:8082/logs-demo/api/v1/user/3",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
