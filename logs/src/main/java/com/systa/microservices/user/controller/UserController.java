@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.systa.microservices.exceptions.ResourceNotFoundException;
 import com.systa.microservices.user.entity.User;
+import com.systa.microservices.user.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1")
