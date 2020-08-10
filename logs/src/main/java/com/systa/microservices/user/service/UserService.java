@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.systa.microservices.exceptions.ResourceNotFoundException;
+import com.systa.microservices.logger.Logger;
 import com.systa.microservices.user.entity.User;
 import com.systa.microservices.user.repository.UserDetailsRepository;
 
@@ -22,6 +23,7 @@ public class UserService {
 		return userDetailsRepository.findAll();
 	}
 	
+	@Logger
 	public User getUserById(long id) throws ResourceNotFoundException{
 		log.info("Getting the user with id {} ", id);
 		return userDetailsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("user not found - id: " + id));

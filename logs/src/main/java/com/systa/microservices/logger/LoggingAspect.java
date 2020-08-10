@@ -57,6 +57,40 @@ public class LoggingAspect {
 		return result;
 	}
 	
+	@Around(value = "@within(com.systa.microservices.logger.Logger) || @annotation(com.systa.microservices.logger.Logger)")
+	public Object arountAdviceForLoggerAnnotation(ProceedingJoinPoint joinPoint) throws Throwable{
+		String loggingLevel = (logLevel != null && !logLevel.isEmpty()) ? logLevel : DEBUG_LEVEL;
+		MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+		Method method = signature.getMethod();
+		Logger loggerMethod = method.getAnnotation(Logger.class);
+		
+		if(loggerMethod.inputArgs() && loggerMethod.isRequired()){ // add logs for input params, if only input params and logs are required
+			// before
+			LogUtil.write(loggingLevel, method.getName() + "() started execution");
+			logParams(joinPoint, method, loggingLevel);
+		}
+		
+		long startTime = System.currentTimeMillis();
+		Object result = null;
+		try{
+			result = joinPoint.proceed();			
+		}
+		catch(Exception e){
+			LogUtil.write(ERROR_LEVEL, "Request execution failed due to " + e.getMessage() + " {}", e.getCause());
+			throw e;
+		}
+		finally{
+			long endTime = System.currentTimeMillis();
+			LogUtil.write(loggingLevel, method.getName() + "() finished execution and took " + (endTime - startTime) + " millis time to execute");		
+		}		
+		
+		if(result != null && loggerMethod.outputArgs() && loggerMethod.isRequired()){
+			LogUtil.write(loggingLevel, method.getName() + "() Respone: [ " + result + " ]");
+		}
+		
+		return result;
+	}
+	
 	private void logParams(ProceedingJoinPoint joinPoint, Method method, String logLevel){
 		if(joinPoint.getArgs() != null && joinPoint.getArgs().length > 0){
 			StringBuilder sb = new StringBuilder();
