@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="DEBUG">
+    
+    <springProperty scope="context" name="springAppName" source="spring.application.name" defaultValue="" />
+    <springProperty scope="context" name="logLevel" source="framework.logging.level" defaultValue="INFO" />
+    
     <Appenders>
         <Console name="LogToConsole" target="SYSTEM_OUT">
             <PatternLayout pattern="%clr{[%d{yyyy-MM-dd HH:mm:ss.SSS}]}{faint} %clr{[%1p]} %clr{[%X{uuid}]}{faint} %clr{[%X{serviceId}]}{faint} %clr{[%X{userName}]}{faint} %clr{[%X{mobileNumber}]}{faint} %clr{:}{faint} %m%n%xwEx"/>

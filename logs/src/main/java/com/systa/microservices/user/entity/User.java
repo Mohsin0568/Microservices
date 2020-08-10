@@ -8,10 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "userDetails")
 @Setter
+@ToString
 public class User {
 
 	private long id;
