@@ -4,11 +4,14 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,7 +57,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, path = "/user")
-	public ResponseEntity<Object> saveUserDetails(@RequestBody UserRegistrationBean user){
+	public ResponseEntity<Object> saveUserDetails(@Valid @RequestBody UserRegistrationBean user){
 		logger.debug("Creating user with loginid " + user.getLoginid());
 		User savedUser = userService.registerUser(user);
 		

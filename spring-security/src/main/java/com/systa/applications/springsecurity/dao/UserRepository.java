@@ -9,4 +9,5 @@ import com.systa.applications.springsecurity.entity.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
 	User findByLoginid(String loginId);
+	User findByEmail(String email);
 }

@@ -18,9 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity
-@EnableScheduling
-@EnableAsync
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 //@PropertySource("classpath:customerportal.properties")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -70,6 +67,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
 		.authorizeRequests()
+		.antMatchers("/demo").permitAll()
+		.antMatchers("/h2-console/**").permitAll()
+		.antMatchers("/user/**").permitAll()
 		//.antMatchers("/userLogin").permitAll()
 		.anyRequest().authenticated();
 
@@ -79,11 +79,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		// disable page caching
 		httpSecurity.headers().cacheControl();
-	}
-	
-	@Override
-	public void configure(WebSecurity web) throws Exception {
-	    web.ignoring().antMatchers("/userLogin")
-	    .antMatchers("/user");
 	}
 }

@@ -1,0 +1,14 @@
+POST /spring-security/user HTTP/1.1
+Host: localhost:9000
+Content-Type: application/json
+Cache-Control: no-cache
+Postman-Token: 4a8751a7-9b8f-fcf7-af65-ba7fcd1dc3c9
+
+{"fname":"Johnmiya", 
+"lname": "Bidenmiya",
+"loginid":"johnbiden1",
+"email":"john@biden.com",
+"mobileNumber":"98765432",
+"password":"John#123",
+"confirmPassword":"John#123"
+}
