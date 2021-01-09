@@ -1,0 +1,1 @@
+# Spring Boot Auth Server, use Github as the authentication source.
