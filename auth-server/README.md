@@ -1,8 +1,30 @@
-# Spring Boot Auth Server, use Github as the authentication source.
+# Spring Boot Auth Server, used Github as the authentication source.
 
 There are two apps in this project.
 
-**resource-server-github:**
-- It has tollData service which will be consumed by UI microservice.
-- Services can only be consumed by passing token given by Github authorization server.
+## secure-service:
+- It has **tollData** service which will be consumed by UI microservice.
+- Services can only be consumed by passing token in Authorization header provided by Github authorization server (obtained in secure-ui service).
 - Token will be authenticated by github using the url mentioned in application.properties.
+
+## secure-ui:
+- spring-security is enabled for this microservice and all endpoints will be authenticated using oauth token.
+- oAuth token will be generated using Github authorization server. 
+- Below steps can enable oAuth generation automatically in spring boot app.
+  - Add ```spring-boot-starter-security``` and ```spring-cloud-starter-oauth2``` as dependencies in pom.xml.
+  - Add annotation ```@EnableOAuth2Sso``` in SpringbootApplication class.
+  - Add below properties in application.properties file, below properties will work only on application which runs on localhost:8080, so they cannot be used for production.
+    ```
+    security.oauth2.client.client-id=bd1c0a783ccdd1c9b9e4
+    security.oauth2.client.client-secret=1a9030fbca47a5b2c28e92f19050bb77824b5ad1
+    security.oauth2.client.access-token-uri=https://github.com/login/oauth/access_token
+    security.oauth2.client.user-authorization-uri=https://github.com/login/oauth/authorize
+    security.oauth2.client.client-authentication-scheme=form
+    security.oauth2.resource.user-info-uri=https://api.github.com/user
+    security.oauth2.resource.prefer-token-info=false
+    ```
+    
+   
+        
+   
+   
