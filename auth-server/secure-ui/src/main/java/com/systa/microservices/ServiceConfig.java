@@ -1,4 +1,4 @@
-package com.systa.microservices.authservergithub;
+package com.systa.microservices;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

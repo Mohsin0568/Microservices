@@ -1,4 +1,4 @@
-package com.systa.microservices.authservergithub;
+package com.systa.microservices;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

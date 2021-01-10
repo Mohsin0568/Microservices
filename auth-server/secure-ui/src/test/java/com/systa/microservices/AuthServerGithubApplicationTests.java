@@ -1,4 +1,4 @@
-package com.systa.microservices.authservergithub;
+package com.systa.microservices;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

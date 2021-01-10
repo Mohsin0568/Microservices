@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.systa.microservices</groupId>
-	<artifactId>auth-server-github</artifactId>
+	<artifactId>secure-ui</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>auth-server-github</name>
 	<description>Demo project for Spring Boot</description>

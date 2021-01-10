@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.systa.microservices</groupId>
-	<artifactId>resource-server-github</artifactId>
+	<artifactId>secure-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>resource-server-github</name>
+	<name>secure-service</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>

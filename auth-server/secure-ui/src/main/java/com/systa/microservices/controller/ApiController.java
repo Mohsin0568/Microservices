@@ -1,4 +1,4 @@
-package com.systa.microservices.authservergithub.controller;
+package com.systa.microservices.controller;
 
 import java.util.ArrayList;
 
