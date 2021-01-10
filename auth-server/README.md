@@ -3,6 +3,7 @@
 There are two apps in this project.
 
 ## secure-service:
+- spring-security is enabled for this microservice and all endpoints will be authenticated using oauth token.
 - It has **tollData** service which will be consumed by UI microservice.
 - Services can only be consumed by passing token in Authorization header provided by Github authorization server (obtained in secure-ui service).
 - Token will be authenticated by github using the url mentioned in application.properties.
