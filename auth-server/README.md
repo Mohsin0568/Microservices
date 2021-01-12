@@ -26,7 +26,8 @@ There are two apps in this project.
     security.oauth2.resource.prefer-token-info=false
     ```
     
-   
-        
+## Architecute Explanation.
+
+![auth-architecure](/auth.png)
    
    
