@@ -30,4 +30,5 @@ There are two apps in this project.
 
 ![auth-architecure](auth.png)
    
-   
+1. Browser makes a request to secure-ui app using url "localhost:8080/login".
+2. secure-ui app 
