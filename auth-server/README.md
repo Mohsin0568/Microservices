@@ -28,6 +28,6 @@ There are two apps in this project.
     
 ## Architecute Explanation.
 
-![auth-architecure](/auth.png)
+![auth-architecure](auth.png)
    
    
