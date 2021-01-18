@@ -31,4 +31,7 @@ There are two apps in this project.
 ![auth-architecure](auth.png)
    
 1. Browser makes a request to secure-ui app using url "localhost:8080/login".
-2. secure-ui app 
+2. secure-ui app checks the configuration to authenticate request, identifies oAuth is enabled, checks the properties file and redirect response with url https://github.com/login/oauth/authorize along with client_id, redirect_uri, response_type and state values.
+3. Now Github login page is opened in user's browser window where user enters its credentials, provides consent and click on login button. Request with login details goes to Github server.
+4. Github validates the auth request, and if credentials are correct then git server sends a redirection response with url http://locahost:8080/login along with  **Authorization Grant** to the browser. Redirection url is same which is given as a redirect_uri in step number 2. This url should also be registered with Github or any other service provider which is used for Oauth authentication. URL localhost:8080/login is not required to be registered as this will be only used for developement.
+5. 
