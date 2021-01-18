@@ -28,7 +28,7 @@ There are two apps in this project.
     
 ## Architecute Explanation.
 
-![auth-architecure](auth.png)
+![auth-architecure](images/auth.png)
    
 1. Browser makes a request to secure-ui app using url "localhost:8080/login".
 2. secure-ui app checks the configuration to authenticate request, identifies oAuth is enabled, checks the properties file and redirect response with url https://github.com/login/oauth/authorize along with client_id, redirect_uri, response_type and state values.
