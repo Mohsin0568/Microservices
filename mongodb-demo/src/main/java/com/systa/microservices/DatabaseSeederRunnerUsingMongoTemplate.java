@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.core.annotation.Order;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
@@ -19,9 +18,8 @@ import com.systa.microservices.documents.FlightType;
 This component should populate the database if empty.
  */
 
-@Component
-@Order(1)
-public class DatabaseSeederRunner implements CommandLineRunner {
+//@Component
+public class DatabaseSeederRunnerUsingMongoTemplate implements CommandLineRunner {
     
 	@Autowired
 	private MongoTemplate mongoTemplate;
