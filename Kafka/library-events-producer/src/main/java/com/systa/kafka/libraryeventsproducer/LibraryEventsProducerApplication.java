@@ -1,4 +1,4 @@
-package com.systa.kafa.libraryeventsproducer;
+package com.systa.kafka.libraryeventsproducer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
