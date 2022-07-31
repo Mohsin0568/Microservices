@@ -15,7 +15,7 @@ import com.systa.microservices.documents.FlightType;
 import com.systa.microservices.repositories.FlightInformationRepository;
 import com.systa.microservices.util.FlightPrinter;
 
-//@Component
+@Component
 public class DatabaseSeederRunnerUsingRepositories implements CommandLineRunner{
 
 	@Autowired
