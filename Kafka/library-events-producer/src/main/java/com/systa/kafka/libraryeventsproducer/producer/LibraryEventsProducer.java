@@ -30,6 +30,7 @@ public class LibraryEventsProducer {
     @Autowired
     ObjectMapper objectMapper;
 
+    // this is one of the approach which will send message to kafka topic asynchonously.
     public void sendLibraryEvent(LibraryEvent event) throws JsonProcessingException{
         Integer key = event.getLibraryEventId();
         String value = objectMapper.writeValueAsString(event);
@@ -50,6 +51,23 @@ public class LibraryEventsProducer {
         });
     }
 
+    // this is one of the approach which will send message to kafka topic synchonously.
+    public void sendLibraryEventSynchronous(LibraryEvent event) throws JsonProcessingException{
+
+        Integer key = event.getLibraryEventId();
+        String value = objectMapper.writeValueAsString(event);
+
+        try {
+            SendResult<Integer, String> result = 
+                kafkaTemplate.send("library-events", key, value).get();
+
+            handleSuccess(key, value, result);
+        } catch (InterruptedException | ExecutionException e) {
+            handleFailure(key, e);
+        }
+    }
+
+    // this is one of the approach which will send message to kafka topic using ProducerRecord. This approach is used from controller
     public void sendLibraryEventViaProducerRecord(LibraryEvent event) throws JsonProcessingException{
         Integer key = event.getLibraryEventId();
         String value = objectMapper.writeValueAsString(event);
@@ -78,22 +96,7 @@ public class LibraryEventsProducer {
         List<Header> headers = List.of(new RecordHeader("event-source", "scanner".getBytes()));
 
         return new ProducerRecord<Integer, String>(topic, null, key, value, headers);
-    }
-
-    public void sendLibraryEventSynchronous(LibraryEvent event) throws JsonProcessingException{
-
-        Integer key = event.getLibraryEventId();
-        String value = objectMapper.writeValueAsString(event);
-
-        try {
-            SendResult<Integer, String> result = 
-                kafkaTemplate.send("library-events", key, value).get();
-
-            handleSuccess(key, value, result);
-        } catch (InterruptedException | ExecutionException e) {
-            handleFailure(key, e);
-        }
-    }
+    }   
 
     private void handleSuccess(Integer key, String value, SendResult<Integer, String> result) {
         log.info("Message send successfully for the key {} with value {} and partition is {}", 
