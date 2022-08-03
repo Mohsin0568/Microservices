@@ -1,5 +1,7 @@
 package com.systa.kafka.libraryeventsproducer.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,7 @@ public class LibraryEventsController {
     LibraryEventsProducer producer;
     
     @PostMapping("/v1/libraryEvent")
-    public ResponseEntity<LibraryEvent> postLibraryEvent(@RequestBody LibraryEvent event) throws JsonProcessingException{
+    public ResponseEntity<LibraryEvent> postLibraryEvent(@RequestBody @Valid LibraryEvent event) throws JsonProcessingException{
 
         // invoke kafka producer
         event.setLibraryEventType(LibraryEventType.NEW);
