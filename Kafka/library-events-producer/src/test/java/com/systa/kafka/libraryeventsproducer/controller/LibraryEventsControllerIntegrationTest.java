@@ -87,4 +87,34 @@ public class LibraryEventsControllerIntegrationTest {
         String expectedRecord = "{\"libraryEventId\":null,\"book\":{\"bookId\":1,\"bookName\":\"learn spring kafka\",\"bookAuthor\":\"Mohsin\"},\"libraryEventType\":\"NEW\"}";
         assertEquals(expectedRecord, record.value());
     }
+
+    @Test
+    @Timeout(5)
+    public void testPUTLibraryEvent(){
+
+        Book book = Book.builder().bookAuthor("Mohsin")
+            .bookId(1)
+            .bookName("learn spring kafka")
+            .build();
+
+        LibraryEvent event = LibraryEvent.builder()
+            .book(book)
+            .libraryEventId(123)
+            .build();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("content-type", MediaType.APPLICATION_JSON_VALUE);
+        
+        HttpEntity<LibraryEvent> entity = new HttpEntity<>(event, headers);
+
+        ResponseEntity<LibraryEvent> responseEntity = 
+            restTemplate.exchange("/v1/libraryEvent", HttpMethod.PUT, entity, LibraryEvent.class);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        ConsumerRecord<Integer, String> record = KafkaTestUtils.getSingleRecord(consumer, "library-events");
+
+        String expectedRecord = "{\"libraryEventId\":123,\"book\":{\"bookId\":1,\"bookName\":\"learn spring kafka\",\"bookAuthor\":\"Mohsin\"},\"libraryEventType\":\"UPDATE\"}";
+        assertEquals(expectedRecord, record.value());
+    }
 }

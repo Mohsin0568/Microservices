@@ -3,6 +3,7 @@ package com.systa.kafka.libraryeventsproducer.controller;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -131,6 +132,52 @@ public class LibraryEventsControllerUnitTest {
         String requestJson = objectMapper.writeValueAsString(event);
 
         mockMvc.perform(post("/v1/libraryEvent")
+            .content(requestJson)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
+        
+    }
+
+    @Test
+    void testPutLibraryEvent() throws Exception {
+
+        Book book = Book.builder().bookAuthor("Mohsin")
+            .bookId(1)
+            .bookName("learn spring kafka")
+            .build();
+
+        LibraryEvent event = LibraryEvent.builder()
+            .book(book)
+            .libraryEventId(123)
+            .build();
+
+        String requestJson = objectMapper.writeValueAsString(event);
+
+        doNothing().when(producer).sendLibraryEventViaProducerRecord(isA(LibraryEvent.class));
+
+        mockMvc.perform(put("/v1/libraryEvent")
+            .content(requestJson)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
+        
+    }
+
+    @Test
+    void testPutLibraryEvent_whenEventIdIsNull() throws Exception {
+
+        Book book = Book.builder().bookAuthor("Mohsin")
+            .bookId(1)
+            .bookName("learn spring kafka")
+            .build();
+
+        LibraryEvent event = LibraryEvent.builder()
+            .book(book)
+            .libraryEventId(null)
+            .build();
+
+        String requestJson = objectMapper.writeValueAsString(event);
+
+        mockMvc.perform(put("/v1/libraryEvent")
             .content(requestJson)
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest());
