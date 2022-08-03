@@ -97,7 +97,7 @@ public class LibraryEventsControllerUnitTest {
     void testPostLibraryEvent_whenBookAuthorIsNull() throws Exception {
 
         Book book = Book.builder().bookAuthor(null)
-            .bookId(null)
+            .bookId(1)
             .bookName("learn spring kafka")
             .build();
 
@@ -119,7 +119,7 @@ public class LibraryEventsControllerUnitTest {
     void testPostLibraryEvent_whenBookNameIsNull() throws Exception {
 
         Book book = Book.builder().bookAuthor("Mohsin")
-            .bookId(null)
+            .bookId(1)
             .bookName(null)
             .build();
 
