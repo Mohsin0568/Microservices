@@ -1,12 +1,12 @@
 -- post event
-curl -i -d '{"libraryEventId":null,"book":{"bookId":456,"bookName":"Kafka Using Spring Boot","bookAuthor":"Mohsin"}}' -H "Content-Type: application/json" -X POST http://localhost:8080/v1/libraryEvent
+curl -i -d '{"libraryEventId":null,"book":{"bookId":416,"bookName":"Kafka Using Spring Boot","bookAuthor":"Mohsin"}}' -H "Content-Type: application/json" -X POST http://localhost:8080/v1/libraryEvent
 
 curl -i -d '{"libraryEventId":null,"book":{"bookId":456,"bookName":"Kafka Using Spring Boot","bookAuthor":"Mohsin"}}' -H "Content-Type: application/json" -X POST http://localhost:8080/v1/libraryEvent/synchronous
 
 curl -i -d '{"libraryEventId":null,"book":{"bookId":456,"bookName":"Kafka Using Spring Boot","bookAuthor":"Mohsin"}}' -H "Content-Type: application/json" -X POST http://localhost:8080/v1/libraryEvent/producerRecord
 
 -- put event WITH ID
-curl -i -d '{"libraryEventId":234,"book":{"bookId":456,"bookName":"Kafka Using Spring Boot","bookAuthor":"Mohsin"}}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/libraryEvent
+curl -i -d '{"libraryEventId":3,"book":{"bookId":416,"bookName":"Kafka Using Spring Boot v2","bookAuthor":"Mohsin"}}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/libraryEvent
 
 -- put event WITHOUT ID
 curl -i -d '{"libraryEventId":null,"book":{"bookId":456,"bookName":"Kafka Using Spring Boot","bookAuthor":"Mohsin"}}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/libraryEvent
