@@ -1,4 +1,4 @@
-package com.systa.kafka.libraryeventsconsumer.config.consumer;
+package com.systa.kafka.libraryeventsconsumer.consumer;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
