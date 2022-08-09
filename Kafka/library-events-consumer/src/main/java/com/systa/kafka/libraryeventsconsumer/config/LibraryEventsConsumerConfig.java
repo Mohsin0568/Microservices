@@ -1,5 +1,7 @@
 package com.systa.kafka.libraryeventsconsumer.config;
 
+import java.util.List;
+
 import org.springframework.boot.autoconfigure.kafka.ConcurrentKafkaListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +20,17 @@ public class LibraryEventsConsumerConfig {
 
     public DefaultErrorHandler errorHandler(){
 
+        // Adding exception in below list for which we don't want to retry consumer logic,
+        // for below exceptions, kafka will not do retry if there is an exception in consumer
+        var exceptionsToIgnore = List.of(
+            IllegalArgumentException.class
+        );
+
         var fixedBackOff = new FixedBackOff(1000L, 2);
         var handler = new DefaultErrorHandler(fixedBackOff);
+
+        exceptionsToIgnore.forEach(handler :: addNotRetryableExceptions);
+
         handler.setRetryListeners((record, ex, deliveryAttempt) -> {
             log.info("Failed record in retry listener, exception is {}, and delivery attempt is {}",
                 ex.getMessage(), deliveryAttempt);

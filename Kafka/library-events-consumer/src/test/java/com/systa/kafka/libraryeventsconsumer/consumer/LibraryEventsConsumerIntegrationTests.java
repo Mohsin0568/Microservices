@@ -140,7 +140,7 @@ public class LibraryEventsConsumerIntegrationTests {
         latch.await(5, TimeUnit.SECONDS);
 
         // then
-        verify(libraryEventConsumerSpy, times(3)).onMessage(isA(ConsumerRecord.class));
-        verify(libraryEventServiceSpy, times(3)).processLibraryEvent(isA(ConsumerRecord.class));
+        verify(libraryEventConsumerSpy, times(1)).onMessage(isA(ConsumerRecord.class));
+        verify(libraryEventServiceSpy, times(1)).processLibraryEvent(isA(ConsumerRecord.class));
     }
 }
