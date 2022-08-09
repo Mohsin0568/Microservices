@@ -172,6 +172,17 @@ public class LibraryEventsConsumerIntegrationTests {
         // then
         verify(libraryEventConsumerSpy, times(1)).onMessage(isA(ConsumerRecord.class));
         verify(libraryEventServiceSpy, times(1)).processLibraryEvent(isA(ConsumerRecord.class));
+
+        // validate if this fail event is send to deadLetterTopic in kafka
+
+        Map<String, Object> configs = KafkaTestUtils.consumerProps("group-2", "true", kafkaBroker);
+        consumer = new DefaultKafkaConsumerFactory<>
+            (configs, new IntegerDeserializer(), new StringDeserializer()).createConsumer();
+        kafkaBroker.consumeFromAnEmbeddedTopic(consumer, deadLetterTopic);
+
+        ConsumerRecord<Integer, String> record = KafkaTestUtils.getSingleRecord(consumer, deadLetterTopic);
+        System.out.println(record.value());
+        assertEquals(json, record.value());
     }
 
     @Test
@@ -196,6 +207,5 @@ public class LibraryEventsConsumerIntegrationTests {
         ConsumerRecord<Integer, String> record = KafkaTestUtils.getSingleRecord(consumer, retryTopic);
         System.out.println(record.value());
         assertEquals(json, record.value());
-
     }
 }
