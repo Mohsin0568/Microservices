@@ -9,6 +9,7 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.listener.DefaultErrorHandler;
+import org.springframework.kafka.support.ExponentialBackOffWithMaxRetries;
 import org.springframework.util.backoff.FixedBackOff;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +27,17 @@ public class LibraryEventsConsumerConfig {
             IllegalArgumentException.class
         );
 
+        var exponentialBackOff = new ExponentialBackOffWithMaxRetries(2);
+        exponentialBackOff.setInitialInterval(1000l);
+        exponentialBackOff.setMultiplier(2.0);
+        exponentialBackOff.setMaxInterval(2000l);
+
+        // FixedBackOff will make sure that reattempts will happen only 2 times and every attempt will have 1 sec time gap.
         var fixedBackOff = new FixedBackOff(1000L, 2);
-        var handler = new DefaultErrorHandler(fixedBackOff);
+        var handler = new DefaultErrorHandler(
+            //fixedBackOff // commenting fixedbackoff ot test exponential back off
+            exponentialBackOff
+        );
 
         exceptionsToIgnore.forEach(handler :: addNotRetryableExceptions);
 
