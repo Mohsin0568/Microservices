@@ -9,14 +9,22 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.util.backoff.FixedBackOff;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Configuration
 @EnableKafka
+@Slf4j
 public class LibraryEventsConsumerConfig {
 
     public DefaultErrorHandler errorHandler(){
 
         var fixedBackOff = new FixedBackOff(1000L, 2);
-        return new DefaultErrorHandler(fixedBackOff);
+        var handler = new DefaultErrorHandler(fixedBackOff);
+        handler.setRetryListeners((record, ex, deliveryAttempt) -> {
+            log.info("Failed record in retry listener, exception is {}, and delivery attempt is {}",
+                ex.getMessage(), deliveryAttempt);
+        });
+        return handler;
     }
 
     @Bean
