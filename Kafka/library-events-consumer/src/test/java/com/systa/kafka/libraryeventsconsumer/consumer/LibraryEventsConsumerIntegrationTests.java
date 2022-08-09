@@ -7,9 +7,11 @@ import static org.mockito.Mockito.verify;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -44,7 +46,8 @@ import com.systa.kafka.libraryeventsconsumer.service.LibraryEventService;
 @SpringBootTest
 @EmbeddedKafka(topics = {"library-events", "library-events.RETRY", "library-events.DLT"}, partitions = 3)
 @TestPropertySource(properties = {"spring.kafka.producer.bootstrap-servers=${spring.embedded.kafka.brokers}", 
-    "spring.kafka.consumer.bootstrap-servers=${spring.embedded.kafka.brokers}"})
+    "spring.kafka.consumer.bootstrap-servers=${spring.embedded.kafka.brokers}",
+    "retry.topic.startup=false"})
 public class LibraryEventsConsumerIntegrationTests {
 
     @Autowired
@@ -79,9 +82,21 @@ public class LibraryEventsConsumerIntegrationTests {
     @BeforeEach
     void setUp(){
 
-        for(MessageListenerContainer container: listnerEndpointRegistry.getListenerContainers()){
-            ContainerTestUtils.waitForAssignment(container, kafkaBroker.getPartitionsPerTopic());
-        }
+
+
+        // commented below code since we don't want all consumer listeners to be up when test application starts, we are pausing retry consumer for test cases.
+        // for(MessageListenerContainer container: listnerEndpointRegistry.getListenerContainers()){
+        //     ContainerTestUtils.waitForAssignment(container, kafkaBroker.getPartitionsPerTopic());
+        // }
+
+        // will be only waiting for main consumer to start.
+        var container = listnerEndpointRegistry.getListenerContainers()
+            .stream().filter(listener -> Objects.equals(listener.getGroupId(), "library-events-listener-group"))
+            .collect(Collectors.toList()).get(0);
+
+        ContainerTestUtils.waitForAssignment(container, kafkaBroker.getPartitionsPerTopic());
+        
+            
 
     }
 
