@@ -27,7 +27,6 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.listener.MessageListenerContainer;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.ContainerTestUtils;
@@ -38,8 +37,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.systa.kafka.libraryeventsconsumer.entity.Book;
+import com.systa.kafka.libraryeventsconsumer.entity.FailureRecord;
 import com.systa.kafka.libraryeventsconsumer.entity.LibraryEvent;
 import com.systa.kafka.libraryeventsconsumer.entity.LibraryEventType;
+import com.systa.kafka.libraryeventsconsumer.repository.FailureRecordRepository;
 import com.systa.kafka.libraryeventsconsumer.repository.LibraryEventRepository;
 import com.systa.kafka.libraryeventsconsumer.service.LibraryEventService;
 
@@ -67,6 +68,9 @@ public class LibraryEventsConsumerIntegrationTests {
 
     @Autowired
     LibraryEventRepository libraryEventRepository;
+
+    @Autowired
+    private FailureRecordRepository failureRecordRepository;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -183,6 +187,29 @@ public class LibraryEventsConsumerIntegrationTests {
         ConsumerRecord<Integer, String> record = KafkaTestUtils.getSingleRecord(consumer, deadLetterTopic);
         System.out.println(record.value());
         assertEquals(json, record.value());
+    }
+
+    @Test
+    void testonMessage_UpdateEvent_NullEventId_retryWillPublishDatainDB() throws InterruptedException, ExecutionException, JsonMappingException, JsonProcessingException{
+        // given
+        String json = " {\"libraryEventId\":null,\"libraryEventType\":\"UPDATE\",\"book\":{\"bookId\":456,\"bookName\":\"Kafka Using Spring Boot\",\"bookAuthor\":\"Mohsin\"}}";
+        kafkaTemplate.sendDefault(json).get();
+
+        // when
+        CountDownLatch latch = new CountDownLatch(1);
+        latch.await(5, TimeUnit.SECONDS);
+
+        // then
+        verify(libraryEventConsumerSpy, times(1)).onMessage(isA(ConsumerRecord.class));
+        verify(libraryEventServiceSpy, times(1)).processLibraryEvent(isA(ConsumerRecord.class));
+
+        // validate if this fail event is send to DB with status as DEAD
+        var count = failureRecordRepository.count();
+        assertEquals(1l, count);
+        List<FailureRecord> outputRecord = (List<FailureRecord>)failureRecordRepository.findAll();
+        assertEquals("DEAD", outputRecord.get(0).getStatus());
+
+        
     }
 
     @Test

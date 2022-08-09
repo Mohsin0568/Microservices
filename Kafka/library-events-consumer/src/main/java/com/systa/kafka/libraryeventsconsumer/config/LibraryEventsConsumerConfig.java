@@ -2,6 +2,7 @@ package com.systa.kafka.libraryeventsconsumer.config;
 
 import java.util.List;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.TopicPartition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,10 +14,13 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.listener.ConsumerRecordRecoverer;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.ExponentialBackOffWithMaxRetries;
 import org.springframework.util.backoff.FixedBackOff;
+
+import com.systa.kafka.libraryeventsconsumer.service.FailureRecordService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,6 +38,9 @@ public class LibraryEventsConsumerConfig {
     @Autowired
     KafkaTemplate kafkaTemplate;
 
+    @Autowired
+    FailureRecordService failureRecordService;
+
     // this method will return the recover logic, this recoverer logic will execute once all reattempts are exhausted.
     public DeadLetterPublishingRecoverer publisherRecover(){
         DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(kafkaTemplate,
@@ -47,6 +54,17 @@ public class LibraryEventsConsumerConfig {
             });
         return recoverer;
     }
+
+    ConsumerRecordRecoverer consumerRecordRecoverer = (consumer, e) -> {
+        ConsumerRecord<Integer, String> record = (ConsumerRecord<Integer, String>) consumer;
+        if (e.getCause() instanceof RecoverableDataAccessException) {
+            
+            failureRecordService.saveFailureRecord(record, e, "RETRY");
+        }
+        else {
+            failureRecordService.saveFailureRecord(record, e, "DEAD");
+        }
+    };
 
     public DefaultErrorHandler errorHandler(){
 
@@ -64,7 +82,8 @@ public class LibraryEventsConsumerConfig {
         // FixedBackOff will make sure that reattempts will happen only 2 times and every attempt will have 1 sec time gap.
         var fixedBackOff = new FixedBackOff(1000L, 2);
         var handler = new DefaultErrorHandler(
-            publisherRecover(),
+            //publisherRecover(), // this line will send fail record to another kafka topic
+            consumerRecordRecoverer, // this line will send fail record to DB.
             //fixedBackOff // commenting fixedbackoff ot test exponential back off
             exponentialBackOff
         );
