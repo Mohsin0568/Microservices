@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -52,6 +53,10 @@ public class LibraryEventService {
     public void validate(LibraryEvent event){
         if(event.getLibraryEventId() == null){
             throw new IllegalArgumentException("Event id cannot be null for update event");
+        }
+
+        if(event.getLibraryEventId() != null && event.getLibraryEventId() == 999){
+            throw new RecoverableDataAccessException("Network is temporary down");
         }
 
         Optional<LibraryEvent> optionalEvent = 
