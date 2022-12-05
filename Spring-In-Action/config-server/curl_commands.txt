@@ -1,0 +1,1 @@
+curl -H "Accept-Language: es" -X GET http://localhost:8071/licencing-service/dev
