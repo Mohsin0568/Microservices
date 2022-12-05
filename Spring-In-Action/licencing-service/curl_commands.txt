@@ -18,3 +18,6 @@ curl -i -d '{"licenseId":"123","description":"Software product","organizationId"
 
 -- delete event
 curl -i -H "Accept-Language:es" -H "Content-Type: application/json" -X DELETE http://localhost:8080/v1/organization/1/license/12
+
+-- Refresh config properties from config server
+curl -H "Accept-Language: es" -X GET http://localhost:8080/actuator/refresh
