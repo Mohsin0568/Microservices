@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: discovery-service
+  cloud:
+    config:
+      uri: http://locahost:8071
+    loadbalancer:
+      enabled: false
+  config:
+    import: configserver
