@@ -1,10 +1,13 @@
 package com.systa.licencing.controller;
 
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeoutException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,6 +26,12 @@ public class LicenseController {
 
     @Autowired
 	private LicenseService licenseService;
+    
+    @GetMapping
+    public ResponseEntity<List<License>> getLicenseByOrganization(@PathVariable("organizationId") String organizationId) throws TimeoutException{
+    	List<License> licenses = licenseService.getLicensesByOrganization(organizationId);
+    	return ResponseEntity.ok(licenses);
+    }
 
 	@RequestMapping(value="/{licenseId}",method = RequestMethod.GET)
 	public ResponseEntity<License> getLicense( @PathVariable("organizationId") String organizationId,
