@@ -19,16 +19,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.systa.licencing.model.License;
 import com.systa.licencing.service.LicenseService;
+import com.systa.licencing.utils.UserContextHolder;
 
 @RestController
 @RequestMapping(value="v1/organization/{organizationId}/license")
 public class LicenseController {
-
-    @Autowired
+	
+	@Autowired
 	private LicenseService licenseService;
     
     @GetMapping
     public ResponseEntity<List<License>> getLicenseByOrganization(@PathVariable("organizationId") String organizationId) throws TimeoutException{
+    	System.out.println("Correlation id for getLicenseByOrganization api is " + UserContextHolder.getUserContext().getCorrelationId() );
     	List<License> licenses = licenseService.getLicensesByOrganization(organizationId);
     	return ResponseEntity.ok(licenses);
     }
