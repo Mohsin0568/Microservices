@@ -21,6 +21,9 @@ import com.systa.licencing.model.License;
 import com.systa.licencing.service.LicenseService;
 import com.systa.licencing.utils.UserContextHolder;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping(value="v1/organization/{organizationId}/license")
 public class LicenseController {
@@ -30,7 +33,7 @@ public class LicenseController {
     
     @GetMapping
     public ResponseEntity<List<License>> getLicenseByOrganization(@PathVariable("organizationId") String organizationId) throws TimeoutException{
-    	System.out.println("Correlation id for getLicenseByOrganization api is " + UserContextHolder.getUserContext().getCorrelationId() );
+    	log.debug("Correlation id for getLicenseByOrganization api is " + UserContextHolder.getUserContext().getCorrelationId() );
     	List<License> licenses = licenseService.getLicensesByOrganization(organizationId);
     	return ResponseEntity.ok(licenses);
     }
@@ -38,7 +41,7 @@ public class LicenseController {
 	@RequestMapping(value="/{licenseId}",method = RequestMethod.GET)
 	public ResponseEntity<License> getLicense( @PathVariable("organizationId") String organizationId,
 			@PathVariable("licenseId") String licenseId) {
-		
+		log.debug("Correlation id for getLicenseByOrganization api is {}", UserContextHolder.getUserContext().getCorrelationId() );
 		License license = licenseService.getLicense(licenseId, organizationId);		
 		return ResponseEntity.ok(license);
 	}

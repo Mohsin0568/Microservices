@@ -6,8 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.systa.licencing.model.Organization;
+import com.systa.licencing.utils.FeignInterceptorUtils;
 
-@FeignClient("organization-service")
+@FeignClient(name="organization-service", configuration = {FeignInterceptorUtils.class})
 public interface OrganizationFeignClient {
 	
 	@RequestMapping(
