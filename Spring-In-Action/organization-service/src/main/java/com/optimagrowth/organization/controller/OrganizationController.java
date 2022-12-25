@@ -13,7 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.optimagrowth.organization.model.Organization;
 import com.optimagrowth.organization.service.OrganizationService;
+import com.optimagrowth.organization.utils.UserContextHolder;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping(value="v1/organization")
 public class OrganizationController {
@@ -23,6 +27,7 @@ public class OrganizationController {
 
     @RequestMapping(value="/{organizationId}",method = RequestMethod.GET)
     public ResponseEntity<Organization> getOrganization( @PathVariable("organizationId") String organizationId) {
+    	log.debug("Correlation id for getOrganization api is {}", UserContextHolder.getUserContext().getCorrelationId() );
         return ResponseEntity.ok(service.findById(organizationId));
     }
 
