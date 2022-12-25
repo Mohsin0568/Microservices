@@ -13,8 +13,14 @@ curl -H "Accept-Language: es" -X GET http://localhost:8080/v1/organization/1/lic
 -- get event with corelation id in header
 curl -H "Accept-Language: es" -H "tmx-correlation-id: TEST-CORELATION-ID" -X GET http://localhost:8080/v1/organization/1/license/123
 
+-- get event via api gateway
+curl -H "Accept-Language: es" -X GET http://localhost:8072/licencing-service/v1/organization/1/license/123
+
 --post event
 curl -i -d '{"licenseId":"123","description":"Software product","organizationId":"1","productName":"Ostock","licenseType":"full"}' -H "Accept-Language:es" -H "Content-Type: application/json" -X POST http://localhost:8080/v1/organization/1/license
+
+-- post event via api gateway
+curl -i -d '{"licenseId":"123","description":"Software product","organizationId":"1","productName":"Ostock","licenseType":"full"}' -H "Accept-Language:es" -H "Content-Type: application/json" -X POST http://localhost:8072/licencing-service/v1/organization/1/license
 
 -- put event
 curl -i -d '{"licenseId":"123","description":"Software product","organizationId":"1","productName":"Ostock","licenseType":"full"}' -H "Accept-Language: es" -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/organization/1/license
